@@ -16,11 +16,15 @@ import geocoder
 import wolframalpha
 
 
-client = wolframalpha.Client("V9JRVW-45R88VEYPP") 
+client = wolframalpha.Client("UQ94PG-K6X8UW4UEK") 
+
+engine = pyttsx3.init()
 
 
 def speak(text):
     engine = pyttsx3.init()
+    if(text=="A string value is not answerable"):
+        text="Sorry sir, I didn't get you. Please say that again"
     print(text)
     engine.say(text)
     engine.runAndWait()
@@ -167,6 +171,125 @@ def google(query):
     speak(f"Searching {query} on google")
     pywhatkit.search(query)
 
+def wolfram(query):
+    api_key = "UQ94PG-K6X8UW4UEK" 
+    requester = wolframalpha.Client(api_key)
+    requested = requester.query(query)
+    try:
+        answer = next(requested.results).text
+        return answer
+    except StopIteration:
+        speak("A string value is not answerable")
+
+def news():
+    apikey = "28328ef2aa4b468da20ed3e76b0531ed"
+    mainurl = "https://newsapi.org/v2/top-headlines?country=in&category=general&apiKey=4ad432c899d345f6b946ed73db668cbd"
+    news = requests.get(mainurl).json()
+    article = news['articles']
+    newsarticle = []
+    for arti in article:
+        newsarticle.append(arti['title'])
+
+    for i in range(10):
+        speak(newsarticle[i])
+        engine.runAndWait()
+
+def location_info_loop():
+    speak("Location Search mode activated!!")
+    
+    while True:
+        speak("Ask about a location, or say 'exit location mode' to exit.")
+        location_query = listen()
+
+        if "exit location mode" in location_query:
+            speak("Location mode exited")
+            break
+
+        try:
+            speak("Here's what I found:")
+            location_result = wolfram(f"Information about {location_query}")
+            speak(location_result)
+        except:
+            speak("Sorry, I couldn't retrieve information about the location.")
+
+def general_info_loop():
+    speak("General Knowledge mode activated!!")
+    
+    while True:
+        speak("Ask a general knowledge question, or say 'exit general knowledge mode' to exit.")
+        knowledge_query = listen()
+
+        if "exit general knowledge mode" in knowledge_query:
+            speak("General Knowledge mode exited")
+            break
+
+        try:
+            knowledge_result = wolfram(knowledge_query)
+            speak(knowledge_result)
+        except:
+            speak("Sorry, I couldn't find the information you requested.")
+
+
+def edu():
+    speak("Calculator mode activated!!")
+    while True:
+        speak("Ask me to calculate, or say 'exit calculator mode' to exit.")
+        abc = listen()
+
+        if "exit calculator mode" in abc or "exit" in abc:
+            speak("Calculator mode exited")
+            break
+
+        abc = abc.replace("plus", "+")
+        abc = abc.replace("minus", "-")
+        abc = abc.replace("power", "^")
+        abc = abc.replace("by", "/")
+        abc = abc.replace("into", "*")
+
+        try:
+            wolfram_res = next(client.query(abc).results).text
+            speak(wolfram_res)
+
+        except:
+            speak("Sorry sir, I didn't get you. Please say that again")
+
+        engine.runAndWait()
+
+def get_math_formula():
+    speak("Math Formula mode activated!!")
+    
+    while True:
+        speak("Ask about a mathematical formula, or say 'exit formula mode' to exit.")
+        formula_query = listen()
+
+        if "exit formula mode" in formula_query or "exit" in formula_query:
+            speak("Formula mode exited")
+            break
+
+        try:
+            formula_result = wolfram(f"Formula for {formula_query}")
+            speak(formula_result)
+        except:
+            speak("Sorry, I couldn't find the formula for the specified mathematical concept.")
+
+def dictionary_mode_loop():
+    speak("Dictionary Mode activated!!")
+    
+    while True:
+        speak("Ask the word you want to look up, or say 'exit dictionary mode' to exit.")
+        word_query = listen()
+
+        if "exit dictionary mode" in word_query or "exit" in word_query:
+            speak("Dictionary mode exited")
+            break
+
+        try:
+            definition = wolfram(f"Definition of {word_query}")
+            speak(definition)
+        except:
+            speak("Sorry, I couldn't find the definition of the word.")
+
+
 def youtube(query):
     result = "https://www.youtube.com/results?search_query=" + query
     web.open(result)
@@ -238,9 +361,6 @@ if __name__ == '__main__':
         elif "battery" in query:
                 battery()
 
-        elif "location" in query:
-                cl()
-
         elif "shutdown" in query or "shut down" in query:
                 shut()
 
@@ -283,7 +403,7 @@ if __name__ == '__main__':
             months =[ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October","November","December"]
             speak("Current month is " + months[e])
 
-        elif "which year" in query:
+        elif "which year" in query or "year" in query:
             t = datetime.datetime.today().strftime("%Y")
             speak(f"{t}")
         
@@ -302,15 +422,34 @@ if __name__ == '__main__':
             term = term.replace("temperature ", "")
             tempquery = str(term)
             if "outside" in tempquery:
-                var = "Temperature in Delhi"
+                var = "Temperature in Visakhapatnam"
                 a = wolfram(var)
-                speak(f"{var} is {a} .")
+                speak(f"{var} is {a}.")
             else:
                 var1 = "Temperature in " + tempquery
                 ans = wolfram(var1)
-                speak(f"{var1} is {ans} .")
+                speak(f"{var1} is {ans}.")
+                
+        elif "news" in query:
+            news()
 
+        elif "calculator" in query:
+            edu()
+
+        elif "formula" in query:
+            get_math_formula()
         
+        elif "location search mode" in query or "location mode" in query or "location mod" in query:
+            location_info_loop()
+
+        elif "location" in query:
+            cl()
+
+        elif "general knowledge mode" in query or "general knowledge" in query or "general mode" in query or "knowledge" in query:
+            general_info_loop()
+        
+        elif "dictionary mode" in query or "dictionary" in query or "dictionary mod" in query:
+            dictionary_mode_loop()
          
         else :
             speak("Sorry sir, I didn't get you. Please say that again")
