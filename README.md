@@ -8,12 +8,12 @@ Run the following command to install the required libraries:
 pip install -r requirements.txt
 
 
-## Commands
+#Commands
 
-Command: hello <br/>
-Description: Greet the assistant.<br/>
-How are you: <br/>
-<br/> <br/>
+Command: hello <
+Description: Greet the assistant.
+How are you: 
+
 
 Command: how are you 
 Description: Check on the well-being of the assistant.
