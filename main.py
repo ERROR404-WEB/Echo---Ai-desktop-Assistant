@@ -190,7 +190,7 @@ def news():
     for arti in article:
         newsarticle.append(arti['title'])
 
-    for i in range(10):
+    for i in range(2):
         speak(newsarticle[i])
         engine.runAndWait()
 
@@ -219,7 +219,7 @@ def general_info_loop():
         speak("Ask a general knowledge question, or say 'exit general knowledge mode' to exit.")
         knowledge_query = listen()
 
-        if "exit general knowledge mode" in knowledge_query:
+        if "exit general knowledge mode" in knowledge_query or "exit" in knowledge_query:
             speak("General Knowledge mode exited")
             break
 

@@ -10,7 +10,7 @@ pip install -r requirements.txt
 
 #Commands
 
-Command: hello <
+Command: hello 
 Description: Greet the assistant.
 How are you: 
 
@@ -23,15 +23,15 @@ Command: need a break or sleep
 Description: Put the system to sleep.
 Volume:
 
-Command: volume
+Command: volume [volume up, volume down, volume mute]
 Description: Control the system volume.
 Brightness:
 
-Command: brightness
+Command: brightness [ set brightness to high , low, medium ]
 Description: Adjust the screen brightness.
 Location:
 
-Command: location
+Command: location [ current location ]
 Description: Retrieve the current location.
 Shutdown:
 
@@ -47,7 +47,7 @@ Command: search "question" on YouTube
 Description: Perform a YouTube search.
 Google search:
 
-Command: google search
+Command: google search [ google search vignan ]
 Description: Perform a Google search.
 Time:
 
